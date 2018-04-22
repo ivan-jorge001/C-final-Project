@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "Board::isPositionAvailable(int, int):board.cpp">
+         <PersistentStrings>
+            <PersistentString
+               value = "(char *)*(this-&gt;boardTable)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
