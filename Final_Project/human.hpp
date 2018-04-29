@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <vector>
 #include "board.hpp"
 #include "enemy.hpp"
 
@@ -25,14 +26,16 @@ private:
     int positionX, positionY, action, actionToDefault, damagePerTurn;
     double life;
     char chip;
-    bool infected;
+    bool infected, randomPosition;
+    std::vector <std::string> attachedToIds;
 public:
-    Human(int x, int y) {
+    Human(int x, int y, bool randomize) {
         this->positionX = x;
         this->positionY = y;
+        this->randomPosition = randomize;
         this->action = 3;
         this->actionToDefault = 3;
-        this->life = 100.00;
+        this->life = 1000.00;
         this->chip = HUMANCHIP;
         this->infected = false;
         this->damagePerTurn = 0;
@@ -42,12 +45,13 @@ public:
     double get_life();
     void restartAction();
     void removeLife(double);
-    void render(Board);
-    void renderOnSpot(Board);
-    void playTurn(Board, Enemy&);
-    void move(std::string, Board);
-    void hasBeenInfectedBy(char, int);
-    void attack(std::string, Enemy&);
+    void render(Board&);
+    void renderOnSpot(Board&);
+    void playTurn(Board&, std::vector<Enemy>&);
+    void move(std::string, Board&);
+    void hasBeenInfectedBy(char, int, std::string);
+    void attack(std::string, Enemy&, Board&);
+    void handleHumanInfected(Board&, std::vector<Enemy>&, int humanPrevX, int humanPrevY);
     bool isInfected();
     bool isDead();
     char get_chip();

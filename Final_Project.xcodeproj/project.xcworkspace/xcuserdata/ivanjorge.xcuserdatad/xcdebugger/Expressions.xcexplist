@@ -3,12 +3,10 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "Board::renderOnSpot(int, int, char):board.cpp">
+      </ContextState>
+      <ContextState
          contextName = "Board::isPositionAvailable(int, int):board.cpp">
-         <PersistentStrings>
-            <PersistentString
-               value = "(char *)*(this-&gt;boardTable)">
-            </PersistentString>
-         </PersistentStrings>
       </ContextState>
    </ContextStates>
 </VariablesViewState>

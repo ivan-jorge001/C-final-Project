@@ -29,6 +29,12 @@
     "system_error": "cpp",
     "future": "cpp",
     "string_view": "cpp",
-    "vector": "cpp"
-  }
+    "vector": "cpp",
+    "__split_buffer": "cpp",
+    "thread": "cpp",
+    "bitset": "cpp",
+    "iterator": "cpp",
+    "locale": "cpp"
+  },
+  "C_Cpp.errorSquiggles": "Disabled"
 }

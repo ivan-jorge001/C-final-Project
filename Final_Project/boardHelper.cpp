@@ -11,22 +11,41 @@
 #include "action.hpp"
 #include "board.hpp"
 
-const char KEY_UP_W = char(87);
-const char KEY_UP_w = char(119);
-const char KEY_RIGHT_A = char(65);
-const char KEY_RIGHT_a = char(97);
-const char KEY_LEFT_d = char(100);
-const char KEY_LEFT_D = char(68);
-const char KEY_DOWN_S = char(83);
-const char KEY_DOWN_s = char(115);
-const char KEY_DOWN_n = char(110);
-const char KEY_DOWN_N = char(78);
-const char KEY_DOWN_m = char(109);
-const char KEY_DOWN_M = char(77);
+// Movements
+const char KEY_UP_W = 'W';
+const char KEY_UP_w = 'w';
+const char KEY_RIGHT_A = 'A';
+const char KEY_RIGHT_a = 'a';
+const char KEY_LEFT_d = 'd';
+const char KEY_LEFT_D = 'D';
+const char KEY_DOWN_S = 'S';
+const char KEY_DOWN_s = 's';
+
+const char KEY_DOWN_Q = 'Q';
+const char KEY_DOWN_q = 'q';
+const char KEY_DOWN_E = 'E';
+const char KEY_DOWN_e = 'e';
+const char KEY_DOWN_Z = 'Z';
+const char KEY_DOWN_z = 'z';
+const char KEY_DOWN_C = 'C';
+const char KEY_DOWN_c = 'c';
+
 const std::string UP = "up";
 const std::string LEFT = "left";
 const std::string RIGHT = "right";
 const std::string DOWN = "down";
+const std::string UP_RIGHT = "up_right";
+const std::string DOWN_RIGHT = "down_right";
+const std::string UP_LEFT = "up_left";
+const std::string DOWN_LEFT = "down_left";
+
+// Attacks
+const char KEY_DOWN_n = 'n';
+const char KEY_DOWN_N = 'N';
+const char KEY_DOWN_m = 'm';
+const char KEY_DOWN_M = 'M';
+
+// ACTION
 const std::string TYPE_MOVE = "move";
 const std::string TYPE_ATTACK = "attack";
 const std::string ATTACK_NETFILTER = "NF";
@@ -39,7 +58,7 @@ namespace boardHelper {
     };
 
     bool isRandomNumInBoard(int range_max, int number) {
-        return number < 0 || number >= range_max - 1;
+        return number <= 0 || number <= (range_max - 1);
     }
 
     Action listenForKeyDown() {
@@ -52,6 +71,59 @@ namespace boardHelper {
             system("stty cooked");
 
             switch(input) {
+
+                case KEY_DOWN_Q :
+                    correctInput = true;
+                    playerAction.type = TYPE_MOVE;
+                    playerAction.action =  UP_LEFT;
+                    return playerAction;
+                    break;
+                case KEY_DOWN_q :
+                    correctInput = true;
+                    playerAction.type = TYPE_MOVE;
+                    playerAction.action =  UP_LEFT;
+                    return playerAction;
+                    break;
+
+                case KEY_DOWN_E :
+                    correctInput = true;
+                    playerAction.type = TYPE_MOVE;
+                    playerAction.action =  UP_RIGHT;
+                    return playerAction;
+                    break;
+                case KEY_DOWN_e :
+                    correctInput = true;
+                    playerAction.type = TYPE_MOVE;
+                    playerAction.action =  UP_RIGHT;
+                    return playerAction;
+                    break;
+
+                case KEY_DOWN_Z :
+                    correctInput = true;
+                    playerAction.type = TYPE_MOVE;
+                    playerAction.action =  DOWN_LEFT;
+                    return playerAction;
+                    break;
+                case KEY_DOWN_z :
+                    correctInput = true;
+                    playerAction.type = TYPE_MOVE;
+                    playerAction.action =  DOWN_LEFT;
+                    return playerAction;
+                    break;
+
+                case KEY_DOWN_C :
+                    correctInput = true;
+                    playerAction.type = TYPE_MOVE;
+                    playerAction.action =  DOWN_RIGHT;
+                    return playerAction;
+                    break;
+                case KEY_DOWN_c :
+                    correctInput = true;
+                    playerAction.type = TYPE_MOVE;
+                    playerAction.action =  DOWN_RIGHT;
+                    return playerAction;
+                    break;
+
                 case KEY_UP_W :
                     // DELETE std::cout << "KEY_UP_W" << std::endl;
                     correctInput = true;
@@ -66,6 +138,7 @@ namespace boardHelper {
                     playerAction.action =  UP;
                     return playerAction;
                     break;
+
                 case KEY_RIGHT_A :
                     correctInput = true;
                     // DELETE std::cout << "KEY_RIGHT_A" << std::endl;
@@ -80,6 +153,7 @@ namespace boardHelper {
                     playerAction.action =  LEFT;
                     return playerAction;
                     break;
+
                 case KEY_LEFT_d :
                     correctInput = true;
                     // DELETE std::cout << "KEY_LEFT_d" << std::endl;
@@ -94,6 +168,7 @@ namespace boardHelper {
                     playerAction.action = RIGHT;
                     return playerAction;
                     break;
+
                 case KEY_DOWN_S :
                     correctInput = true;
                     // DELETE std::cout << "KEY_DOWN_S" << std::endl;
@@ -108,6 +183,7 @@ namespace boardHelper {
                     playerAction.action = DOWN;
                     return playerAction;
                     break;
+
                 case KEY_DOWN_n :
                     correctInput = true;
                     // DELETE std::cout << "KEY_DOWN_S" << std::endl;
@@ -122,6 +198,7 @@ namespace boardHelper {
                     playerAction.action = ATTACK_NETFILTER;
                     return playerAction;
                     break;
+
                 case KEY_DOWN_m :
                     correctInput = true;
                     // DELETE std::cout << "KEY_DOWN_S" << std::endl;
@@ -145,22 +222,28 @@ namespace boardHelper {
         return playerAction;
     };
 
-    void move(std::string direction, Board board, int& x, int& y, char chip) {
+    void move(std::string direction, Board& board, int& x, int& y, char chip) {
         int prevX = x, prevY = y;
         if (direction == UP) {
-            x -=1;
-        }
-
-        if (direction == DOWN) {
-            x +=1;
-        }
-
-        if (direction == LEFT) {
             y -=1;
-        }
-
-        if (direction == RIGHT) {
+        } else if (direction == DOWN) {
             y +=1;
+        } else if (direction == LEFT) {
+            x -=1;
+        } else if (direction == RIGHT) {
+            x +=1;
+        } else if (direction == UP_RIGHT) {
+            y -=1;
+            x +=1;
+        } else if (direction == UP_LEFT) {
+            y -=1;
+            x -=1;
+        } else if (direction == DOWN_LEFT) {
+            y +=1;
+            x -=1;
+        } else if (direction == DOWN_RIGHT) {
+            y +=1;
+            x +=1;
         }
 
         if (board.isPositionAvailable(x, y)) {
@@ -169,5 +252,9 @@ namespace boardHelper {
             x = prevX;
             y = prevY;
         }
+    }
+
+    bool checkPorcentage(int value) {
+        return boardHelper::randomNumber(100) <= value;
     }
 }

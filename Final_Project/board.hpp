@@ -10,15 +10,18 @@
 #define board_hpp
 
 #include <stdio.h>
+#include <vector>
+
 struct HighValueTargets {
   int x, y;
 };
 
 class Board {
 private:
-    char** boardTable;
+    // char** boardTable;
+    std::vector<std::vector<char>> boardTable;
     int dimensionX, dimensionY, number_of_Hvt;
-    HighValueTargets * targets;
+    std::vector<HighValueTargets> targets;
 
 public:
     Board(int boardX, int boardY, int number_of_Hvts)
@@ -26,17 +29,36 @@ public:
         this->dimensionX = boardX;
         this->dimensionY = boardY;
         this->number_of_Hvt = number_of_Hvts;
-        this->targets = new HighValueTargets [number_of_Hvts];
-        this->boardTable = new char* [boardY];
-        for (int y = 0; y < boardY; y++) {
-            this->boardTable[y] = new char [boardX];
+        targets.reserve(number_of_Hvts);
+        boardTable.reserve(dimensionY);
+
+        for (int i = 0; i < number_of_Hvt; i++) {
+            HighValueTargets hvt;
+            this->targets.push_back(hvt);
         }
+
+        for (int y = 0; y < dimensionY; y++) {
+            std::vector<char> row;
+            row.reserve(dimensionX);
+            for (int x = 0; x < dimensionX; x++) {
+                row.push_back(x);
+            }
+            boardTable.push_back(row);
+        }
+        // this->boardTable = new char* [boardY];
+        // for (int y = 0; y < boardY; y++) {
+        //     this->boardTable[y] = new char [boardX];
+        // }
     }
 
     void setCorners();
-    HighValueTargets* getHvt();
+    std::vector<HighValueTargets> getHvt();
+    int numberOfHvt();
+    int getDimensionX();
+    int getDimensionY();
     void initBoard();
     void printBoard();
+    void ereasedHvt(int);
     void renderHighValueTargets();
     void render(int, int, char);
     void renderOnSpot(int, int, char);

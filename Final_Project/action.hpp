@@ -16,5 +16,6 @@ struct Action
 {
  std::string type;
  std::string action;
+ std::string charToAttack;
 };
 #endif /* action_hpp */
