@@ -52,6 +52,10 @@ void Board::initBoard() {
     this->renderHighValueTargets();
 }
 
+int Board::numberOfHvt() {
+    return this->number_of_Hvt;
+}
+
 void Board::printBoard() {
     std::cout << "\n\n\n";
     for (int y = 0; y < this->dimensionY; y++) {
@@ -75,12 +79,15 @@ void Board::printBoard() {
 }
 
 bool Board::isNearMe(char chip, int range, int positionX, int positionY) {
-    int rangeX = (positionX - range) < 0 ? positionX - range : 0;
-    int rangeY = (positionY - range) < 0 ? positionY - range : 0;
+    int minRangeX = (positionX - range) > 0 ? (positionX - range) : 0;
+    int minRangeY = (positionY - range) > 0 ? (positionY - range) : 0;
 
-    for (int x = rangeX; x <= (range + positionX); x++) {
-        for (int y = rangeY; y <= (range + positionY); y++) {
-            if (this->boardTable[x][y] == chip) {
+    int maxRangeX = (positionX + range) >= this->dimensionX ? (this->dimensionX - 1) : (positionX + range);
+    int maxRangeY = (positionY + range) >= this->dimensionY ? (this->dimensionY - 1) : (positionY + range);
+
+    for (int y = minRangeY; y <= maxRangeY; y++) {
+        for (int x = minRangeX; x <= maxRangeX; x++) {
+            if (this->boardTable[y][x] == chip) {
                 return true;
             }
         }
@@ -89,8 +96,15 @@ bool Board::isNearMe(char chip, int range, int positionX, int positionY) {
     return false;
 }
 
+int Board::getDimensionX() {
+    return this->dimensionX;
+}
+
+int Board::getDimensionY() {
+    return this->dimensionY;
+}
+
 void Board::renderHighValueTargets() {
-    HighValueTargets targets[this->number_of_Hvt];
     for (int i = 0; i < this->number_of_Hvt; i++) {
         int positionX = 0, positionY = 0;
         do {
@@ -98,25 +112,24 @@ void Board::renderHighValueTargets() {
             positionY = boardHelper::randomNumber(this->dimensionY);
             //DELETE std::cout << (positionX < 0) << "||" << (positionX >= this->dimensionX - 1) << "||"<< (positionY < 0) << "||" << (positionY >= this->dimensionY - 1) << std::endl;
         } while (positionX < 0 || positionX >= this->dimensionX - 1 || positionY < 0 || positionY >= this->dimensionY - 1);
-        targets[i].x = positionX;
-        targets[i].y = positionY;
+        this->targets[i].x = positionX;
+        this->targets[i].y = positionY;
     }
 
     for (int i = 0; i < this->number_of_Hvt; i++) {
         // DELETE std::cout<< targets[i].x << " === " << targets[i].y <<std::endl;
-        this->boardTable[targets[i].y][targets[i].x] = HVT;
-
+        this->boardTable[this->targets[i].y][this->targets[i].x] = HVT;
     }
     this->printBoard();
 };
 
-HighValueTargets* Board::getHvt() {
+std::vector<HighValueTargets> Board::getHvt() {
     return this->targets;
 }
 
 void Board::render(int x, int y, char figure) {
     if (Board::isPositionAvailable(x, y)) {
-        this->boardTable[x][y] = figure;
+        this->boardTable.at(y).at(x) = figure;
         // std::cout << "success rendering\n";
         Board::printBoard();
         return;
@@ -126,11 +139,9 @@ void Board::render(int x, int y, char figure) {
 }
 
 void Board::render(int x, int y, char figure, int prevX, int prevY) {
-
-
     if (Board::isPositionAvailable(x, y) || (x == prevX && y == prevY)) {
-        this->boardTable[prevX][prevY] = EMPTY;
-        this->boardTable[x][y] = figure;
+        this->boardTable[prevY][prevX] = EMPTY;
+        this->boardTable[y][x] = figure;
         // std::cout << "success rendering\n";
         Board::printBoard();
         return;
@@ -140,18 +151,21 @@ void Board::render(int x, int y, char figure, int prevX, int prevY) {
 }
 
 void Board::renderOnSpot(int x, int y, char figure) {
-    this->boardTable[x][y] = figure;
+    this->boardTable[y][x] = figure;
     Board::printBoard();
     return;
 }
 
 bool Board::isPositionAvailable(int x, int y) {
-    if (this->boardTable[x][y] && this->boardTable[x][y] == EMPTY) {
-        return true;
-    }
-    return false;
+    return this->boardTable[y][x] == EMPTY;
 }
 
 void Board::clear(int x, int y) {
-    this->boardTable[x][y] = EMPTY;
+    this->boardTable[y][x] = EMPTY;
 };
+void Board::ereasedHvt(int index) {
+    Board::clear(this->targets.at(index).x, this->targets.at(index).y);
+    this->targets.erase(this->targets.begin() + index);
+    Board::printBoard();
+    std::cout << "HVT has been destroyed \n";
+}

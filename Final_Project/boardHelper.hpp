@@ -15,9 +15,10 @@
 #include "board.hpp"
 
 namespace boardHelper {
-    int randomNumber(int range);
-    bool isRandomNumInBoard(int range_max, int number);
-    void move(std::string, Board, int&, int&, char);
+    int randomNumber(int);
+    bool isRandomNumInBoard(int , int);
+    void move(std::string, Board&, int&, int&, char);
     Action listenForKeyDown();
+    bool checkPorcentage(int);
 }
 #endif /* boardHelper_hpp */
